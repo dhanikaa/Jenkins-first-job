@@ -154,3 +154,112 @@ This guide covered:
 ✅ Explanation of your **Jenkinsfile**  
 
 Let me know if you need further improvements! 🚀
+
+---
+
+## **Multi-Stage Jenkins Pipeline**
+In addition to the single-stage pipeline, you can also define **multi-stage** pipelines in Jenkins to handle different parts of the application separately. 
+Below is a **multi-stage pipeline** that builds both the **backend** and **frontend** using different environments.
+
+### **Jenkinsfile - Multi-Stage Pipeline**
+```groovy
+pipeline {
+  agent none
+  stages {
+    stage('Back-end') {
+      agent {
+        docker { image 'maven:3.8.1-adoptopenjdk-11' }
+      }
+      steps {
+        sh 'mvn --version'
+      }
+    }
+    stage('Front-end') {
+      agent {
+        docker { image 'node:16-alpine' }
+      }
+      steps {
+        sh 'node --version'
+      }
+    }
+  }
+}
+```
+
+### **Explanation of the Multi-Stage Pipeline**
+
+1. **Pipeline Declaration**
+   ```groovy
+   pipeline {
+   ```
+   - Defines the **Jenkins pipeline**, which consists of multiple stages.
+
+2. **Agent None**
+   ```groovy
+   agent none
+   ```
+   - This tells Jenkins that the **default agent** is not used.
+   - Instead, each stage will define its own **Docker-based agent**.
+
+3. **Back-end Stage**
+   ```groovy
+   stage('Back-end') {
+   ```
+   - This stage is responsible for backend-related operations.
+
+4. **Defining the Backend Agent**
+   ```groovy
+   agent {
+     docker { image 'maven:3.8.1-adoptopenjdk-11' }
+   }
+   ```
+   - Runs the backend stage inside a **Maven 3.8.1 + OpenJDK 11** Docker container.
+   - Ensures that Maven and Java are available for backend-related tasks.
+
+5. **Executing Backend Commands**
+   ```groovy
+   steps {
+     sh 'mvn --version'
+   }
+   ```
+   - Runs the `mvn --version` command to check if Maven is correctly installed.
+
+6. **Front-end Stage**
+   ```groovy
+   stage('Front-end') {
+   ```
+   - Handles frontend-related operations.
+
+7. **Defining the Frontend Agent**
+   ```groovy
+   agent {
+     docker { image 'node:16-alpine' }
+   }
+   ```
+   - Runs the frontend stage inside a **Node.js 16 Alpine-based** Docker container.
+   - Ensures that Node.js and npm are available for frontend tasks.
+
+8. **Executing Frontend Commands**
+   ```groovy
+   steps {
+     sh 'node --version'
+   }
+   ```
+   - Runs the `node --version` command to verify Node.js installation.
+
+### **Why Use a Multi-Stage Pipeline?**
+✅ **Isolation** – Backend and frontend run in separate environments, avoiding dependency conflicts.  
+✅ **Parallel Execution (if enabled)** – Stages can run independently, improving efficiency.  
+✅ **Flexibility** – Each stage can have different tools and configurations.  
+
+---
+
+## **Running Your Multi-Stage Jenkinsfile**
+1. **Commit the `Jenkinsfile` to your repository**.
+2. **Create a Jenkins Pipeline job** and configure it to use "Pipeline script from SCM".
+3. **Enter your GitHub repository URL** and save the job.
+4. **Click "Build Now"** to execute the pipeline.
+5. **Check the console output** to see logs for both backend and frontend stages.
+
+This multi-stage pipeline ensures **clean, isolated, and reproducible builds** for both backend and frontend components. 🚀
+
