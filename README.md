@@ -81,8 +81,7 @@ This file is stored in your repository and executed when triggered by **Git push
 
 ---
 
-## **Understanding Your Jenkinsfile**
-Here’s the Jenkinsfile you provided:
+## **Jenkinsfile - Single-Stage Pipeline**
 
 ```groovy
 pipeline {
